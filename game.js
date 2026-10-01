@@ -567,8 +567,10 @@ showMenu();
 fit();
 requestAnimationFrame(frame);
 
+/* @test-hooks:start */
 // 테스트용
 window.__pk = { get state() { return state; }, get board() { return board; }, get level() { return level; }, get crashes() { return crashes; },
   get hint() { return hint; }, get hintsLeft() { return hintsLeft; }, get moving() { return moving; },
   tapCar, useHint, newLevel, showMenu, GX, GY, get cell() { return cell; } };
+/* @test-hooks:end */
 })();
