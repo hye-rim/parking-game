@@ -9,4 +9,4 @@
 - 힌트는 한 판에 3번: 지금 뺄 수 있는 차 중 다른 차를 가장 많이 막고 있는 차를 알려 준다
 - 진행한 레벨은 브라우저에 저장된다
 
-`index.html` 을 그대로 열면 된다. 규칙·판 만들기는 `logic.js`, 화면·입력은 `game.js`.
+`index.html` 을 그대로 열면 된다. 규칙·판 만들기는 `logic.js`(화면 없이 Node 로 시험할 수 있다: `node test/logic.test.js`), 화면·입력은 `game.js`.
