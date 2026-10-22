@@ -1,4 +1,6 @@
 'use strict';
+// 오락실 튜토리얼이 '진짜로 일어난 일'을 알아채는 신호 (arcade/public/tutorial.js 가 듣는다. 튜토리얼이 아니면 아무도 안 듣는다)
+const tutorialSignal = (type) => window.dispatchEvent(new CustomEvent('arcade:tutorial', { detail: { type } }));
 
 // 주차장 탈출: 화면·입력·흐름. 판 규칙은 logic.js (LOGIC) 에 있다.
 (() => {
@@ -145,11 +147,13 @@ function tapCar(i) {
     moving.set(i, { kind: 'exit', t: 0, off: 0, pathLen: L.pathOf(car, board.n).length });
     if (hint && hint.i === i) hint = null;
     sfx.go();
+    tutorialSignal('exit');
     updateHud();
     if (L.solved(board)) winTimer = setTimeout(win, 650);
     return;
   }
   // 막혀 있으면 앞차 범퍼에 닿을 때까지(빈칸 수 + 두 차의 앞뒤 여백) 갔다가 쾅 하고 돌아온다
+  tutorialSignal('bump');
   moving.set(i, { kind: 'bump', t: 0, off: 0, dist: block.dist + CAR_MY * 2 - 0.02, block: block.i, hit: false });
 }
 
