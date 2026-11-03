@@ -100,7 +100,7 @@ let hint = null;                              // { i, t } 잠깐 반짝이는 �
 let moving = new Map();                       // 차 번호 → { kind:'exit'|'bump', t, off, ... }
 let shakes = new Map();                       // 차 번호 → 남은 흔들림 시간
 let particles = [], floaters = [], banner = null;
-let winTimer = null;
+let winTimer = null, winPending = false;      // 클리어 직전(0.65초 안)에 일시정지하면 계속하기에서 마저 띄운다
 let clock = 0;
 
 function newLevel(n, same = false) {
@@ -110,7 +110,7 @@ function newLevel(n, same = false) {
   cell = GRID / board.n;
   crashes = 0; hintsLeft = HINTS; hint = null;
   moving.clear(); shakes.clear(); particles = []; floaters = [];
-  clearTimeout(winTimer);
+  clearTimeout(winTimer); winPending = false;
   banner = { text: `레벨 ${n}`, t: 0 };
   state = 'play';
   hideOverlay();
@@ -200,6 +200,7 @@ function burst(x, y) {
 }
 
 function win() {
+  if (state === 'paused') { winPending = true; return; }
   if (state !== 'play') return;
   state = 'won';
   if (level > best) { best = level; store.set(BEST_KEY, String(best)); }
@@ -520,7 +521,7 @@ function pause() {
   showOverlay(`<h2 class="inked">일시정지</h2><button data-act="continue">계속하기</button>
     <button class="sub" data-act="menu">← 그만하기</button>`);
 }
-function resume() { if (state !== 'paused') return; state = 'play'; hideOverlay(); }
+function resume() { if (state !== 'paused') return; state = 'play'; hideOverlay(); if (winPending) { winPending = false; win(); } }
 
 // ---------- 입력 ----------
 // 누르는 순간 바로 반응한다 (떼기를 기다리지 않아서 아이폰에서 탭이 씹히지 않는다)
